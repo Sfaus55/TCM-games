@@ -114,5 +114,86 @@
 
     function renderMaterials() {
       const container = document.getElementById('user-materials');
-      const ma
+      const materials = JSON.parse(localStorage.getItem('materials') || '[]');
+      container.innerHTML = '';
+      materials.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `<h3>${m.title}</h3><a href="${m.link}" target="_blank">Open Material</a>`;
+        container.appendChild(div);
+      });
+    }
+
+    window.onload = renderMaterials;
+  </script>
+
+  <section id="tcm-game" class="section">
+    <h2>TCM Point Matching Game</h2>
+    <p>Match the acupuncture point to its correct function!</p>
+
+    <div class="card" id="game-area" style="text-align:center;">
+      <h3 id="game-question">Loading...</h3>
+      <div id="game-options" style="margin-top:20px;"></div>
+      <p id="game-feedback" style="font-weight:bold; margin-top:15px;"></p>
+      <button onclick="nextQuestion()" style="margin-top:20px; padding:10px 20px; border:none; background:#222; color:white; border-radius:8px; cursor:pointer;">Next</button>
+    </div>
+  </section>
+
+  <script>
+    const tcmData = [
+      { point: 'LU 5', fx: 'Clears heat, descends rebellious Qi' },
+      { point: 'LI 4', fx: 'Releases exterior, regulates face' },
+      { point: 'ST 36', fx: 'Tonifies Qi and blood, harmonizes ST' },
+      { point: 'LU 1', fx: 'Clears LU heat, stops cough' },
+      { point: 'LI 10', fx: 'Harmonizes ST & intestines' }
+    ];
+
+    let current = {};
+
+    function nextQuestion() {
+      const q = tcmData[Math.floor(Math.random() * tcmData.length)];
+      current = q;
+      document.getElementById('game-question').textContent = `What is the function of ${q.point}?`;
+
+      const options = shuffle(tcmData.map(i => i.fx));
+      const container = document.getElementById('game-options');
+      container.innerHTML = '';
+
+      options.forEach(op => {
+        const btn = document.createElement('button');
+        btn.textContent = op;
+        btn.style.display = 'block';
+        btn.style.margin = '10px auto';
+        btn.style.padding = '10px';
+        btn.style.width = '80%';
+        btn.style.border = '1px solid #333';
+        btn.style.borderRadius = '8px';
+        btn.style.cursor = 'pointer';
+        btn.onclick = () => checkAnswer(op);
+        container.appendChild(btn);
+      });
+
+      document.getElementById('game-feedback').textContent = '';
+    }
+
+    function checkAnswer(ans) {
+      const feedback = document.getElementById('game-feedback');
+      if (ans === current.fx) {
+        feedback.textContent = 'Correct! 🎉';
+        feedback.style.color = 'green';
+      } else {
+        feedback.textContent = 'Wrong ❌ Try again!';
+        feedback.style.color = 'red';
+      }
+    }
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    nextQuestion();
+  </script>
+
+</section>
+</body>
 </html>

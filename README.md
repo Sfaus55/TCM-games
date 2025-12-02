@@ -1,5 +1,3 @@
-# TCM-games
-Games to help study TCM material for those currently in a TCM program
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +97,22 @@ Games to help study TCM material for those currently in a TCM program
         <iframe src="https://playsnake.org/"></iframe>
       </div>
     </div>
-  </section>
+    <script>
+    // Simple localStorage-based material adder
+    function addMaterial() {
+      const title = document.getElementById('matTitle').value.trim();
+      const link = document.getElementById('matLink').value.trim();
+      if (!title || !link) return alert('Please enter both a title and a link.');
 
-</body>
+      const materials = JSON.parse(localStorage.getItem('materials') || '[]');
+      materials.push({ title, link });
+      localStorage.setItem('materials', JSON.stringify(materials));
+      renderMaterials();
+      document.getElementById('matTitle').value = '';
+      document.getElementById('matLink').value = '';
+    }
+
+    function renderMaterials() {
+      const container = document.getElementById('user-materials');
+      const ma
 </html>
